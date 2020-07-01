@@ -1,0 +1,187 @@
+<odoo>
+  <data>
+        <record id="revisi_purchase_form" model="ir.actions.act_window">
+            <field name="name">Revisi Purchase Order</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">revisi.purchase</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Klik Create Revisi Purchase
+                </p>
+            </field>
+        </record>
+        <record id="revisi_purchase_tree" model="ir.ui.view">
+            <field name="name">revisi_purchase_tree</field>
+            <field name="model">revisi.purchase</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="Revisi Purchase Order">
+                    <field name="name" /> 
+                    <field name="date_order"/>
+                    <field name="partner_id"/>
+                    <field name="purchase_id"/>
+                    <field name="state"/>
+
+                </tree>
+            </field>
+        </record>
+
+        <record id="revisi_purchase_form_view" model="ir.ui.view">
+            <field name="name">revisi_purchase_tree</field>
+            <field name="model">revisi.purchase</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Revisi Purchase Order" duplicate="0" delete="false">
+                    <header>
+                        <!-- <field name="state" invisible="1"/> -->
+                        <button string="Cancel" type="object" name="cancel"   class="oe_highlight" attrs="{'invisible':['|',('state','in',('done'))]}"/>
+                        <button string="Confirm" type="object" name="confirm"   class="oe_highlight" attrs="{'invisible':['|',('state','in',('cancel','done','confirm'))]}"/>
+                        <button  string="Validate" type="object" name="validate"  groups="account.group_account_manager" class="oe_highlight" confirm="Anda Yakin Akan melakukan revisi Purhcase Order tersebut, pastikan data yang anda revisi benar?" attrs="{'invisible':['|',('state','in',('draft','cancel','done'))]}"/>
+                       <!--  <field name="state" widget="statusbar" statusbar_visible="draft,done" />
+                          <button name="action_change"  string="change" type="object" /> -->
+                    </header>
+                    <sheet>
+                        <group>  
+                            <div class="oe_title">  
+                                <label for="name"/>
+                                <h1>
+                                <field name="name"/>
+                                </h1>
+                            </div>
+                        </group>
+
+                        <group>
+                            <field name="date_order"/>
+                            <field name="state" invisible="1"/>
+                            <field name="createby" options='{"no_create_edit":True,"no_open":True}'/>
+                            <field name="purchase_id" attrs="{'readonly' :[('state','in',['done','confirm','cancel'])]}" options='{"no_create_edit":True,"no_open":True}'/>
+                            <!-- <field name="divisi" options='{"no_create_edit":True,"no_open":True}'/> -->
+                            <field name="partner_id" options='{"no_create_edit":True,"no_open":True}'/>
+                             <field name="currency_id" attrs="{'readonly' :[('state','in',['done','confirm','cancel'])]}" options='{"no_create_edit":True,"no_open":True}'/>
+                            <field name="reason" attrs="{'readonly' :[('state','in',['done','confirm','cancel'])]}" options='{"no_create_edit":True,"no_open":True}'/>
+                            <field name="approveby" options='{"no_create_edit":True,"no_open":True}'/>
+                        </group>
+                        <notebook>
+                            <page string="Products">
+                            <field name="order_line" attrs="{'readonly': [('state', 'in', ('confirm','done', 'cancel'))]}">
+                                 <tree string="Purchase Order Lines" editable="bottom">
+                                    <field name="currency_id" invisible="1"/>
+                                    <field name="product_id" context="{'partner_id':parent.partner_id, 'quantity':product_qty,'uom':product_uom"/>
+                                    <field name="name"/>
+                                   <!--  <field name="company_id" groups="base.group_multi_company" options="{'no_create': True}"/> -->
+                                    <field name="product_qty"/>
+                                    <field name="product_uom" groups="product.group_uom" />
+                                    <field name="price_unit"/>
+                                    <field name="taxes_id" widget="many2many_tags" context="{'default_type_tax_use': 'purchase'}"/>
+                                    <field name="price_subtotal" widget="monetary"/>
+                                </tree>
+                                <form string="Purchase Order Line">
+                                    <sheet>
+                                        <group>
+                                            <group>
+                                                <field name="product_id"
+                                                       context="{'partner_id': parent.partner_id}"/>
+                                                <label for="product_qty"/>
+                                                <div>
+                                                    <field name="product_qty" class="oe_inline"/>
+                                                    <span class="oe_inline">&#160;</span>
+                                                    <field name="product_uom" groups="product.group_uom" class="oe_inline"/>
+                                                </div>
+                                                <field name="price_unit"/>
+                                                <field name="purchase_line_id" invisible="1"/>
+                                            </group>
+                                            <group>
+                                                <field name="taxes_id" widget="many2many_tags" />
+<!--                                                 <field name="date_planned" widget="date"/>
+                                                <field name="account_analytic_id" colspan="2" groups="purchase.group_analytic_accounting"/> -->
+                                              <!--   <field name="company_id" groups="base.group_multi_company" options="{'no_create': True}"/> -->
+                                            </group>
+                                        </group>
+<!--                                         <notebook>
+                                        <page string="Notes">
+                                            <field name="name"/>
+                                        </page><page string="Invoices and Incoming Shipments">
+                                            <field name="invoice_lines"/>
+                                            <field name="move_ids"/>
+                                        </page>
+                                        </notebook> -->
+                                    </sheet>
+                                </form>
+                            </field>
+                            <group class="oe_subtotal_footer oe_right">
+                                <field name="amount_untaxed" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                <field name="amount_tax" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                <div class="oe_subtotal_footer_separator oe_inline">
+                                    <label for="amount_total"/>
+                                </div>
+                                <field name="amount_total" nolabel="1" class="oe_subtotal_footer_separator" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                            </group>
+                           <!--  <field name="notes" class="oe_inline" placeholder="An administrator can set up default Terms and conditions in your Company settings."/> -->
+                            <div class="oe_clear"/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="revisi_purchase_search" model="ir.ui.view">
+            <field name="name">RevisiPurchase</field>
+            <field name="model">revisi.purchase</field>
+            <field name="arch" type="xml">
+                <search string="Search Revisi Purchase">
+                        <field name="name"/>
+                        <field name="date_order"/>
+                        <field name="partner_id"/>
+                        <field name="purchase_id"/>
+                        <field name="state"/>
+                        
+
+                </search>
+            </field>
+        </record>
+        <record id="revisi_purchase_action" model="ir.actions.act_window">
+                <field name="name">Revisi Purchase Order</field>
+                <field name="type">ir.actions.act_window</field>
+                <field name="res_model">revisi.purchase</field>
+                <field name="view_mode">tree,kanban,form</field>
+                <field name="view_id" ref="revisi_purchase_tree"/>
+                <field name="search_view_id" ref="revisi_purchase_search"/>
+                <field name="help" type="html">
+                    <p class="oe_view_nocontent_create">
+                        Click to create a  Revisi Purchase Order
+                    </p>
+                </field>
+        </record>  
+        
+        <menuitem id="menu_revisi_purchase_action"
+            name="Revisi Purchase Order"
+            parent="purchase.menu_procurement_management"
+            action="revisi_purchase_action"
+            sequence="7"/>
+
+
+    <!-- Top menu item -->
+    <!--
+    <menuitem name="dev_revisipo" id="dev_revisipo.menu_root"/>
+    -->
+    <!-- menu categories -->
+    <!--
+    <menuitem name="Menu 1" id="dev_revisipo.menu_1" parent="dev_revisipo.menu_root"/>
+    <menuitem name="Menu 2" id="dev_revisipo.menu_2" parent="dev_revisipo.menu_root"/>
+    -->
+    <!-- actions -->
+    <!--
+    <menuitem name="List" id="dev_revisipo.menu_1_list" parent="dev_revisipo.menu_1"
+              action="dev_revisipo.action_window"/>
+    <menuitem name="Server to list" id="dev_revisipo" parent="dev_revisipo.menu_2"
+              action="dev_revisipo.action_server"/>
+
+    <menuitem name="Revisi Purchase Order" parent="purchase.menu_procurement_management"
+        id="create_cursor_menu_histori"
+        sequence="7"
+        action="create_cursor_action"/>    
+    -->
+  </data>
+</odoo>

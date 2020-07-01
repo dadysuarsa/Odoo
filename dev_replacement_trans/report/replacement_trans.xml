@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+ <template id="report_replacement_trans_document"> 
+    <!--<t t-call="report.external_layout">-->
+        <t t-set="o" t-value="o.with_context({'lang':o.partner_id.lang})" />
+        <div class="header">
+            <div class="col-md-12">
+                <table class="table" style="margin-bottom: 2px;">
+                    <tr><td style="text-align: center;font-size: 24pt;border-top:none" colspan="6">FORM REPLACEMENT TRANSFER</td></tr>
+                </table>
+            </div>
+          </div>
+          <div class="page">
+        	<div class="col-md-12">
+             <table  class="table"  >
+                    <tr>
+                        <td style="font-size: 10pt;width: 750px;border:2px dashed black;border-left:none;border-right:none;border-bottom: none" colspan="3">Beneficiary :</td>
+                        <td style="font-size: 10pt;border:2px dashed black;border-right:none;border-bottom: none" colspan="3">No. and Date of Replacement Transfer :</td>
+                    </tr>
+                    <tr>
+                        <td colspan="3" style="border:2px dashed black;border-left:none;border-top:none;border-bottom: none">
+                            <table class="table">
+                                <tr>
+                                    <td style="font-size: 10pt;border-top: none">
+                                        <span t-field="o.company_id"/><br/>
+                                        <span t-field="o.company_id.street"/>
+                                        <span t-field="o.company_id.city"/><br/>
+                                        <span t-field="o.company_id.state_id"/>
+                                        <span t-field="o.company_id.zip"/><br/>
+                                        <span t-field="o.company_id.country_id"/>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td colspan="3" style="border:2px dashed black;border-top:none;border-right:none"><table class="table">
+                                <tr>
+                                    <td style="font-size: 10pt;border-top:none;">
+                                        <span t-field="o.name"/> 
+                                          <div t-if="o.date_trans">
+                                            <span t-esc="datetime.datetime.strptime(o.date_trans, '%Y-%m-%d %H:%M:%S').strftime('%B %d,%Y')"/>
+                                          </div>
+                                    </td>
+                                </tr>
+                                <tr><td style="font-size: 10pt;border-top:none;">&#160;</td></tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="font-size: 10pt;width: 125px;border:2px dashed;border-left:none;border-right:none;border-bottom: none">Buyer</td>
+                        <td style="font-size: 10pt;width: 10px;border:2px dashed;border-left:none;border-right:none;border-top:none;border-bottom: none"> : </td>
+                        <td style="font-size: 10pt;border:2px dashed;border-left:none;border-right:none;border-top:none;border-bottom: none"></td>
+                        <td style="font-size: 10pt;border:2px dashed;border-right:none;border-bottom: none">Invoice Ref</td>
+                        <td style="font-size: 10pt;width: 10px;border:2px dashed;border-left:none;border-right:none;border-bottom: none"> : </td>
+                        <td style="font-size: 10pt;border:2px dashed;border-left:none;border-right:none;border-bottom: none">
+                            <span t-field="o.invoice_id.number"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="font-size: 10pt;width: 125px;border:2px dashed;border-top: none;border-left:none;border-right: none"></td>
+                        <td style="font-size: 10pt;width: 10px;border:2px dashed;border-top:none;border-left:none;border-right: none;"></td>
+                        <td style="font-size: 10pt;border:2px dashed;border-top:none;border-left:none;">
+                            <t t-if="not o.partner_id">
+                                <span t-field="o.partner_id"/><br/>
+                                <span t-field="o.partner_id.street"/> <span t-field="o.partner_id.city"/><br/>
+                                <span t-field="o.partner_id.state_id"/> <span t-field="o.partner_id.zip"/><br/>
+                                <span t-field="o.partner_id.country_id"/>                            
+                            </t>                            
+                        </td>
+                        <td style="font-size: 10pt;border:2px dashed;border-top:none;border-left:none;border-right: none">Do. No Ref</td>
+                        <td style="font-size: 10pt;width: 10px;border:2px dashed;border-top:none;border-left:none;border-right: none"> : </td>
+                        <td style="font-size: 10pt;border:2px dashed;border-top:none;border-left:none;border-right: none">
+                            <span t-field="o.picking_id.name"/>
+                        </td>
+                    </tr>
+                </table>
+                <table class="table">
+
+                </table>
+        		<table class="table">
+                    <thead>
+                        <tr>
+                            <th style="font-size: 10pt;text-align: center;vertical-align: middle;border:2px dashed;border-top:none;border-right:none;border-left:none">Product</th>
+                            <th style="font-size: 10pt;text-align: center;vertical-align: middle;border:2px dashed;border-top:none;border-right:none;border-left:none">Quantity</th>
+                            <th style="font-size: 10pt;text-align: center;vertical-align: middle;border:2px dashed;border-top:none;border-right:none;border-left:none">Unit Price</th>
+                            <th style="font-size: 10pt;text-align: center;vertical-align: middle;border:2px dashed;border-top:none;border-right:none;border-left:none">Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr t-foreach="o.order_line" t-as="line">
+                            <td style="font-size: 10pt;border:none;">
+                                <span t-field="line.product_id.name"/>
+                            </td>
+                            <td style="font-size: 10pt;border:none;">
+                                <span t-field="line.qty"/>
+                            </td>
+                            <td style="font-size: 10pt;border:none;">
+                                <span t-field="line.unit_price"/>
+                            </td>
+                            <td style="font-size: 10pt;border:none;">
+                                <span t-field="line.amount_subtotal"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="font-size: 10pt;border:2px dashed;border-right: none;border-left:none">
+                                &#160;
+                            </td>
+                            <td style="font-size: 10pt;border:2px dashed;border-right: none;border-left:none">
+                                <b>TOTAL</b>
+                            </td>
+                            <td style="font-size: 10pt;border:2px dashed;border-right: none;border-left:none">
+                                <b>
+                                 <span style="float: left;">
+                                    <t t-esc="sum(l.qty for l in o.order_line) " />
+                                </span>
+                                </b>
+                            </td>
+                            <td style="font-size: 10pt;border:2px dashed;border-right: none;border-left:none">
+                                <b>
+                                    <span t-field="o.amount_total"/>
+                                </b>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+        	</div>
+            <div class="col-md-12">
+                <table class="table">
+                    <tr>
+                        <td style="font-size: 10pt;text-align: right;border-top:none" colspan="3">&#160;</td>
+                    </tr>
+                    <tr>
+                        <td style="font-size: 10pt;text-align: right;border-top:none">&#160;</td>
+                        <td style="font-size: 10pt;text-align: right;border-top:none">Signed By, ___________________________</td>
+                        <td style="font-size: 10pt;text-align: right;border-top:none">&#160;</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div class="footer">
+            
+        </div>
+</template>
+<template id="report_replacement_trans">
+    <t t-call="report.html_container">
+        <t t-foreach="docs" t-as="o">
+            <t t-call="dev_replacement_trans.report_replacement_trans_document" />
+        </t>
+    </t>
+</template>
+</odoo>

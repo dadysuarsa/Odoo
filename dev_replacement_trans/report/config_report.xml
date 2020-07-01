@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+        <report 
+            string="Replacement Trans" 
+            id="action_report_replacementtrans" 
+            model="replacement.trans" 
+            report_type="qweb-pdf"
+            name="dev_replacement_trans.report_replacement_trans" 
+            file="dev_replacement_trans.report_replacement_trans"
+        />
+
+       
+</odoo>
