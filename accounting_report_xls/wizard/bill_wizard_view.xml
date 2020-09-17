@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>
+		<record model="ir.ui.view" id="bill_wizard">
+			<field name="name">bill.report.wizard.form</field>
+			<field name="model">bill.report.wizard</field>
+			<field name="arch" type="xml">
+				<form string="Bill Report">
+					<group>
+						<field name="company_id" required="1" widget="selection" />
+					</group>
+					<group>
+						<group>
+							<label for="date_from" string="Period" />
+							<div class="o_row">
+								<field name="date_from" required="1" />
+								<field name="date_to" required="1" />
+							</div>
+							<field name="report_type" required="1" />
+						</group>
+						<group>
+							<field name="type" required="1" />
+							<field name="currency_id" required="1"
+								attrs="{'invisible': [('type','=','idr')]}" />
+						</group>
+					</group>
+					<group>
+						<field name="partner_ids" widget="many2many_tags" domain="[('supplier','=',True)]" />
+					</group>
+					<footer>
+						<button name="view_bill_report" string="View" type="object"
+							class="oe_highlight" />
+						or
+						<button string="Cancel" class="oe_link" special="cancel" />
+					</footer>
+				</form>
+			</field>
+		</record>
+
+		<record model="ir.actions.act_window" id="action_bill_report_wizard">
+			<field name="name">Laporan Bills</field>
+			<field name="res_model">bill.report.wizard</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">form</field>
+			<field name="target">new</field>
+		</record>
+
+		<menuitem name="Laporan Bills" id="bill_menu" parent="hutang_report"
+			action="action_bill_report_wizard" />
+
+	</data>
+</openerp>

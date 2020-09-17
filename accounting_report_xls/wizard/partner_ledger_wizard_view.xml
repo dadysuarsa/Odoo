@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>
+		<record model="ir.ui.view" id="partner_ledger_wizard">
+			<field name="name">partner.ledger.report.wizard.form</field>
+			<field name="model">partner.ledger.report.wizard</field>
+			<field name="arch" type="xml">
+				<form string="General Ledger Report">
+					<group>
+						<field name="company_id" required="1" widget="selection" />
+					</group>
+					<group>
+						<group>
+							<field name="date_from" required="1"/>
+							<field name="date_to" required="1"/>
+						</group>
+						<group>
+							<field name="target_move" required="1" widget="radio"/>
+						</group>
+					</group>
+					<group>
+						<field name="account_ids" widget="many2many_tags" domain="[('reconcile','=', True)]"/>
+						<field name="partner_ids" widget="many2many_tags" />
+					</group>
+					<footer>
+						<button name="view_partner_ledger_report" string="View" type="object"
+							class="oe_highlight"/>
+						or
+						<button string="Cancel" class="oe_link" special="cancel" />
+					</footer>
+				</form>
+			</field>
+		</record>
+
+		<record model="ir.actions.act_window" id="action_partner_ledger_wizard">
+			<field name="name">Partner Ledger</field>
+			<field name="res_model">partner.ledger.report.wizard</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">form</field>
+			<field name="target">new</field>
+		</record>
+		
+		<menuitem name="Partner" id="partner_report" parent="xls_report"/>
+		<menuitem name="Partner Ledger" id="partner_ledger" parent="partner_report" action="action_partner_ledger_wizard" />
+	
+	</data>
+</openerp>

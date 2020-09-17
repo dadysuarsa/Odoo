@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>
+		<record model="ir.ui.view" id="mutasi_persediaan_wizard">
+			<field name="name">mutasi.persediaan.wizard.form</field>
+			<field name="model">mutasi.persediaan.wizard</field>
+			<field name="arch" type="xml">
+				<form string="Report Mutasi Persediaan">
+					<group>
+						<group>
+							<field name="date_from" required="1" />
+							<field name="date_to" required="1" />
+						</group>
+						<group>
+							<field name="type" required="1" invisible="1" />
+						</group>
+					</group>
+					<group>
+						<field name="warehouse_ids" widget="many2many_tags" options="{'no_create': True}" />
+						<field name="product_ids" widget="many2many_tags" options="{'no_create': True}" />
+					</group>
+					<footer>
+						<button name="view_mutasi_persediaan" string="Print" type="object"
+							class="oe_highlight" />
+						or
+						<button string="Cancel" class="oe_link" special="cancel" />
+					</footer>
+				</form>
+			</field>
+		</record>
+
+		<record model="ir.actions.act_window" id="action_rekap_mutasi_persediaan_wizard">
+			<field name="name">Mutasi Persediaan (Rekap)</field>
+			<field name="res_model">mutasi.persediaan.wizard</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">form</field>
+			<field name="context">{'default_type': 'rekap'}</field>
+			<field name="target">new</field>
+		</record>
+		<record model="ir.actions.act_window" id="action_detail_mutasi_persediaan_wizard">
+			<field name="name">Mutasi Persediaan (Detail)</field>
+			<field name="res_model">mutasi.persediaan.wizard</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">form</field>
+			<field name="context">{'default_type': 'detail'}</field>
+			<field name="target">new</field>
+		</record>
+
+		<!-- <menuitem id="submenu_mutasi_persediaan_xls" parent="xls_report"
+			name="Inventory" sequence='1' />
+		<menuitem id="submenu_detail_mutasi_persediaan_id" parent="submenu_mutasi_persediaan_xls"
+			name="Mutasi Persediaan" action="action_detail_mutasi_persediaan_wizard" /> -->
+
+
+	</data>
+</openerp>

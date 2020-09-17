@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>
+		<record model="ir.ui.view" id="piutang_summary_wizard">
+			<field name="name">piutang.summary.report.wizard.form</field>
+			<field name="model">piutang.summary.report.wizard</field>
+			<field name="arch" type="xml">
+				<form string="Piutang Report">
+					<group>
+						<field name="company_id" required="1" widget="selection" />
+					</group>
+					<group>
+						<group>
+							<field name="date_from" required="1" />
+							<field name="date_to" required="1" />
+						</group>
+						<group>
+							<field name='state' required='1' />
+							<field name="type" required='1' />
+							<field name="currency_id" required='1'
+								attrs="{'invisible':[('type','!=','valas')]}" />
+						</group>
+					</group>
+					<group>
+						<field name="partner_ids" widget="many2many_tags" />
+					</group>
+					<footer>
+						<button name="view_piutang_summary_report" string="View"
+							type="object" class="oe_highlight" />
+						or
+						<button string="Cancel" class="oe_link" special="cancel" />
+					</footer>
+				</form>
+			</field>
+		</record>
+
+		<record model="ir.actions.act_window"
+			id="action_piutang_summary_report_wizard">
+			<field name="name">Laporan Piutang by Buyer</field>
+			<field name="res_model">piutang.summary.report.wizard</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">form</field>
+			<field name="target">new</field>
+		</record>
+
+		<!-- <menuitem name="Laporan Piutang by Buyer" id="piutang_summary_menu"
+			parent="piutang_report" action="action_piutang_summary_report_wizard" /> -->
+
+	</data>
+</openerp>
