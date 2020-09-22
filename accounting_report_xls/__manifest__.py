@@ -16,7 +16,6 @@
         'wizard/partner_balance_wizard_view.xml',
         'wizard/aged_partner_balance_wizard_view.xml',
         'wizard/mutasi_persediaan_wizard_view.xml',
-        'wizard/piutang_wizard_view.xml',
         'wizard/piutang_detail_wizard_view.xml',
         'wizard/hutang_wizard_view.xml',
         'wizard/bill_wizard_view.xml',

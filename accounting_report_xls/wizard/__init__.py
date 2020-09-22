@@ -4,7 +4,6 @@ import partner_ledger_wizard
 import partner_balance_wizard
 import aged_partner_balance_wizard
 import mutasi_persediaan_wizard
-import piutang_wizard
 import piutang_detail_wizard
 import hutang_wizard
 import bill_wizard

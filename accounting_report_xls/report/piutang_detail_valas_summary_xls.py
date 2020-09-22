@@ -43,6 +43,9 @@ class piutang_detail_valas_summary_xls(report_xls):
             #PEMBAYARAN
             [data['valas'], 10],
             ['IDR', 20],
+            #TOTAL
+            [data['valas'], 10],
+            ['IDR', 20],
             #SELISIH IDR
             ['IDR', 20],
             #SALDO AHIR
@@ -84,11 +87,12 @@ class piutang_detail_valas_summary_xls(report_xls):
         ws.write_merge(row_count-1, row_count-1, 3, 5, 'SALDO AWAL', cell_style_center)
         ws.write_merge(row_count-1, row_count-1, 6, 7, 'PENJUALAN', cell_style_center)
 
-        ws.write_merge(row_count-2, row_count-2, 8, 12, 'PELUNASAN', cell_style_center)
+        ws.write_merge(row_count-2, row_count-2, 8, 14, 'PELUNASAN', cell_style_center)
         ws.write_merge(row_count-1, row_count-1, 8, 10, 'INFO PEMBAYARAN', cell_style_center)
-        ws.write_merge(row_count-1, row_count-1, 11, 12, 'TOTAL', cell_style_center)
-        ws.write_merge(row_count-1, row_count-1, 13, 13, 'SELISIH KURS', cell_style_center)
-        ws.write_merge(row_count-1, row_count-1, 14, 15, 'SALDO AHIR', cell_style_center)
+        ws.write_merge(row_count-1, row_count-1, 11, 12, 'NOMINAL', cell_style_center)
+        ws.write_merge(row_count-1, row_count-1, 13, 14, 'TOTAL', cell_style_center)
+        ws.write_merge(row_count-1, row_count-1, 15, 15, 'SELISIH KURS', cell_style_center)
+        ws.write_merge(row_count-1, row_count-1, 16, 18, 'SALDO AHIR', cell_style_center)
 
         for column in columns:
             ws.col(col_count).width = 256 * column[1]
@@ -97,7 +101,7 @@ class piutang_detail_valas_summary_xls(report_xls):
         has_payment = False
         for partner in sorted(data['csv'].items(), key=operator.itemgetter(0)):
             row_count += 1
-            ws.write_merge(row_count, row_count, 0, 16, partner[0], c_hdr_cell_style)
+            ws.write_merge(row_count, row_count, 0, 18, partner[0], c_hdr_cell_style)
             row_start = row_count
             for invoice in partner[1]['invoices']:
                 col_count = 0
@@ -121,14 +125,14 @@ class piutang_detail_valas_summary_xls(report_xls):
                     ws.write(row_count, col_count, data_invoice[8], c_cell_style)
                     col_count += 1
                     
-                ws.write(row_count, 11, partner[1]['invoices'][invoice]['total_pelunasan_valas'], c_cell_style_bold)
-                ws.write(row_count, 12, partner[1]['invoices'][invoice]['total_pelunasan_idr'], c_cell_style_bold)
+                ws.write(row_count, 13, partner[1]['invoices'][invoice]['total_pelunasan_valas'], c_cell_style_bold)
+                ws.write(row_count, 14, partner[1]['invoices'][invoice]['total_pelunasan_idr'], c_cell_style_bold)
                 
-                ws.write(row_count, 13, partner[1]['invoices'][invoice]['total_selisih_idr'], c_cell_style_bold)
+                ws.write(row_count, 15, partner[1]['invoices'][invoice]['total_selisih_idr'], c_cell_style_bold)
                 
-                ws.write(row_count, 14, partner[1]['invoices'][invoice]['saldo_ahir_valas'], c_cell_style_bold)
-                ws.write(row_count, 15, partner[1]['invoices'][invoice]['saldo_ahir_idr'], c_cell_style_bold)
-                ws.write(row_count, 16, data['kurs_ahir'], c_cell_style_bold)
+                ws.write(row_count, 16, partner[1]['invoices'][invoice]['saldo_ahir_valas'], c_cell_style_bold)
+                ws.write(row_count, 17, partner[1]['invoices'][invoice]['saldo_ahir_idr'], c_cell_style_bold)
+                ws.write(row_count, 18, data['kurs_ahir'], c_cell_style_bold)
                 has_payment = False
                 for payments in partner[1]['invoices'][invoice]['payments']:
                     for payment in payments:
@@ -145,6 +149,10 @@ class piutang_detail_valas_summary_xls(report_xls):
                             col_count += 1
                             ws.write(row_count, col_count, lines[2], c_cell_style)
                             col_count += 1
+                            ws.write(row_count, col_count, lines[-2], c_cell_style)
+                            col_count += 1
+                            ws.write(row_count, col_count, lines[-1], c_cell_style)
+                            col_count += 1
                                 
                             row_count += 1
                 if has_payment:
@@ -160,12 +168,12 @@ class piutang_detail_valas_summary_xls(report_xls):
                 sum_cell_end = xlwt.Utils.rowcol_to_cell(row_count - 1, col_count)
                 ws.write(row_count, col_count, xlwt.Formula('sum(' + sum_cell_start + ':' + sum_cell_end + ')'), c_hdr_cell_style_grey)
                 col_count += 1                
-            while col_count <= 10:
+            while col_count <= 13:
                 sum_cell_start = xlwt.Utils.rowcol_to_cell(row_start + 1, col_count)
                 sum_cell_end = xlwt.Utils.rowcol_to_cell(row_count - 1, col_count)
                 ws.write(row_count, col_count, '', c_hdr_cell_style_grey)
                 col_count += 1
-            while col_count <= 15:
+            while col_count <= 17:
                 sum_cell_start = xlwt.Utils.rowcol_to_cell(row_start + 1, col_count)
                 sum_cell_end = xlwt.Utils.rowcol_to_cell(row_count - 1, col_count)
                 ws.write(row_count, col_count, xlwt.Formula('sum(' + sum_cell_start + ':' + sum_cell_end + ')'), c_hdr_cell_style_grey)
@@ -185,6 +193,10 @@ class piutang_detail_valas_summary_xls(report_xls):
         ws.write(row_count, col_count, data['grand_total'][3], c_hdr_cell_style_grey)
         col_count += 1 
         ws.write(row_count, col_count, data['grand_total'][4], c_hdr_cell_style_grey)
+        col_count += 1 
+        ws.write(row_count, col_count, '', c_hdr_cell_style_grey)
+        col_count += 1 
+        ws.write(row_count, col_count, '', c_hdr_cell_style_grey)
         col_count += 1 
         ws.write(row_count, col_count, '', c_hdr_cell_style_grey)
         col_count += 1 

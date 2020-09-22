@@ -102,8 +102,8 @@ class HutangReportWizard(models.TransientModel):
                 payment_banks_before_amount += payment_amount
             #PAYMENT KOMPENSASI
             kompensasi = []
-            payment_kompensasi = bill.payment_move_line_ids.filtered(lambda l: l.journal_id.code in ['KPE','KPL'] and self.date_from <= l.date <= self.date_to)
-            payment_kompensasi_before = bill.payment_move_line_ids.filtered(lambda l: l.journal_id.code in ['KPE','KPL'] and l.date < self.date_from)
+            payment_kompensasi = bill.payment_move_line_ids.filtered(lambda l: l.journal_id.code.replace(" ", "") in ['KPE','KPL'] and self.date_from <= l.date <= self.date_to)
+            payment_kompensasi_before = bill.payment_move_line_ids.filtered(lambda l: l.journal_id.code.replace(" ", "") in ['KPE','KPL'] and l.date < self.date_from)
             for payment in payment_kompensasi_before:
                 payment_amount = abs(payment.balance)
                 data = [
@@ -121,10 +121,10 @@ class HutangReportWizard(models.TransientModel):
                 payment_kompensasi_before_amount += payment_amount
             #PAYMENT PERANTARA
             perantara = []
-            payment_perantara = bill.payment_move_line_ids.filtered(lambda l: l.journal_id.code in ['PRLC','PRTB'] and self.date_from <= l.date <= self.date_to)
-            payment_perantara_before = bill.payment_move_line_ids.filtered(lambda l: l.journal_id.code in ['PRLC','PRTB'] and l.date < self.date_from)
+            payment_perantara = bill.payment_move_line_ids.filtered(lambda l: l.journal_id.code.replace(" ", "") in ['PRLC','PRTB'] and self.date_from <= l.date <= self.date_to)
+            payment_perantara_before = bill.payment_move_line_ids.filtered(lambda l: l.journal_id.code.replace(" ", "") in ['PRLC','PRTB'] and l.date < self.date_from)
             for payment in payment_perantara:
-                payment_amount = payment_amount = abs(payment.balance)
+                payment_amount = abs(payment.balance)
                 data = [
                     payment.move_id.name,
                     payment.move_id.ref,
@@ -141,10 +141,10 @@ class HutangReportWizard(models.TransientModel):
                 payment_perantara_before_amount += payment_amount
             #RECLASS
             reclass = []
-            payment_reclass = bill.payment_move_line_ids.filtered(lambda l: l.journal_id.code in ['LUMAP','IUMAP'] and self.date_from <= l.date <= self.date_to)
-            payment_reclass_before = bill.payment_move_line_ids.filtered(lambda l: l.journal_id.code in ['LUMAP','IUMAP'] and l.date < self.date_from)
+            payment_reclass = bill.payment_move_line_ids.filtered(lambda l: l.journal_id.code.replace(" ", "") in ['LUMAP','IUMAP'] and self.date_from <= l.date <= self.date_to)
+            payment_reclass_before = bill.payment_move_line_ids.filtered(lambda l: l.journal_id.code.replace(" ", "") in ['LUMAP','IUMAP'] and l.date < self.date_from)
             for payment in payment_reclass:
-                payment_amount = payment_amount = abs(payment.balance)
+                payment_amount = abs(payment.balance)
                 data = [
                     payment.move_id.name,
                     payment.move_id.ref,
@@ -158,7 +158,7 @@ class HutangReportWizard(models.TransientModel):
                 gt_reclass += payment_amount
                 reclass.append(data)
             for payment in payment_reclass_before:
-                payment_amount = payment_amount = abs(payment.balance)
+                payment_amount = abs(payment.balance)
                 payment_reclass_before_amount += payment_amount
             #RETUR
             retur = []
@@ -181,10 +181,10 @@ class HutangReportWizard(models.TransientModel):
                 retur.append(data)
             #LAIN
             lain = []
-            payment_lain = bill.payment_move_line_ids.filtered(lambda l: l.journal_id.code in ['JMAP'] and self.date_from <= l.date <= self.date_to)
-            payment_lain_before = bill.payment_move_line_ids.filtered(lambda l: l.journal_id.code in ['JMAP'] and l.date < self.date_from)
+            payment_lain = bill.payment_move_line_ids.filtered(lambda l: l.journal_id.code.replace(" ", "") in ['JMAP'] and self.date_from <= l.date <= self.date_to)
+            payment_lain_before = bill.payment_move_line_ids.filtered(lambda l: l.journal_id.code.replace(" ", "") in ['JMAP'] and l.date < self.date_from)
             for payment in payment_lain:
-                payment_amount = payment_amount = abs(payment.balance)
+                payment_amount = abs(payment.balance)
                 data = [
                     payment.move_id.name,
                     payment.move_id.ref,
@@ -200,7 +200,7 @@ class HutangReportWizard(models.TransientModel):
                 gt_lain += payment_amount
                 lain.append(data)
             for payment in payment_lain_before:
-                payment_amount = payment_amount = abs(payment.balance)
+                payment_amount = abs(payment.balance)
                 payment_retur_before_amount += payment_amount
 
             payments = [
@@ -356,8 +356,8 @@ class HutangReportWizard(models.TransientModel):
 
             #PAYMENT KOMPENSASI
             kompensasi = []
-            payment_kompensasi = bill.payment_move_line_ids.filtered(lambda l: l.journal_id.code in ['KPE','KPL'] and self.date_from <= l.date <= self.date_to)
-            payment_kompensasi_before = bill.payment_move_line_ids.filtered(lambda l: l.journal_id.code in ['KPE','KPL'] and l.date < self.date_from)
+            payment_kompensasi = bill.payment_move_line_ids.filtered(lambda l: l.journal_id.code.replace(" ", "") in ['KPE','KPL'] and self.date_from <= l.date <= self.date_to)
+            payment_kompensasi_before = bill.payment_move_line_ids.filtered(lambda l: l.journal_id.code.replace(" ", "") in ['KPE','KPL'] and l.date < self.date_from)
             for payment in payment_kompensasi:
                 print(bill.number)
                 payment_amount_currency = abs(payment.amount_currency)
@@ -383,8 +383,8 @@ class HutangReportWizard(models.TransientModel):
 
             #PAYMENT PERANTARA
             perantara = []
-            payment_perantara = bill.payment_move_line_ids.filtered(lambda l: l.journal_id.code in ['PRLC','PRTB'] and self.date_from <= l.date <= self.date_to)
-            payment_perantara_before = bill.payment_move_line_ids.filtered(lambda l: l.journal_id.code in ['PRLC','PRTB'] and l.date < self.date_from)
+            payment_perantara = bill.payment_move_line_ids.filtered(lambda l: l.journal_id.code.replace(" ", "") in ['PRLC','PRTB'] and self.date_from <= l.date <= self.date_to)
+            payment_perantara_before = bill.payment_move_line_ids.filtered(lambda l: l.journal_id.code.replace(" ", "") in ['PRLC','PRTB'] and l.date < self.date_from)
             for payment in payment_perantara:
                 payment_amount_currency = abs(payment.amount_currency)
                 payment_amount_idr = abs(payment.balance)
@@ -412,8 +412,8 @@ class HutangReportWizard(models.TransientModel):
 
             #RECLASS
             reclass = []
-            payment_reclass = bill.payment_move_line_ids.filtered(lambda l: l.journal_id.code in ['LUMAP','IUMAP'] and self.date_from <= l.date <= self.date_to)
-            payment_reclass_before = bill.payment_move_line_ids.filtered(lambda l: l.journal_id.code in ['LUMAP','IUMAP'] and l.date < self.date_from)
+            payment_reclass = bill.payment_move_line_ids.filtered(lambda l: l.journal_id.code.replace(" ", "") in ['LUMAP','IUMAP'] and self.date_from <= l.date <= self.date_to)
+            payment_reclass_before = bill.payment_move_line_ids.filtered(lambda l: l.journal_id.code.replace(" ", "") in ['LUMAP','IUMAP'] and l.date < self.date_from)
             for payment in payment_reclass:
                 payment_amount_currency = abs(payment.amount_currency)
                 payment_amount_idr = abs(payment.balance)
@@ -473,8 +473,8 @@ class HutangReportWizard(models.TransientModel):
                 retur.append(data)
             #LAIN
             lain = []
-            payment_lain = bill.payment_move_line_ids.filtered(lambda l: l.journal_id.code in ['JMAP'] and self.date_from <= l.date <= self.date_to)
-            payment_lain_before = bill.payment_move_line_ids.filtered(lambda l: l.journal_id.code in ['JMAP'] and l.date < self.date_from)
+            payment_lain = bill.payment_move_line_ids.filtered(lambda l: l.journal_id.code.replace(" ", "") in ['JMAP'] and self.date_from <= l.date <= self.date_to)
+            payment_lain_before = bill.payment_move_line_ids.filtered(lambda l: l.journal_id.code.replace(" ", "") in ['JMAP'] and l.date < self.date_from)
             for payment in payment_lain:
                 payment_amount_currency = abs(payment.amount_currency)
                 payment_amount_idr = abs(payment.balance)
@@ -500,8 +500,8 @@ class HutangReportWizard(models.TransientModel):
                     payment_amount_currency,
                     payment_amount_idr
                 ]
-                pelunasan_valas += 0
-                pelunasan_idr += 0
+                pelunasan_valas += payment_amount_currency
+                pelunasan_idr += payment_amount_idr
                 gt_lain_valas += payment_amount_currency
                 gt_lain_idr += payment_amount_idr
                 lain.append(data)

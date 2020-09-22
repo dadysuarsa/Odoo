@@ -117,7 +117,6 @@ class hutang_summary_xls(report_xls):
                             col_count += 1
                             ws.write(row_count, col_count, lines[-1], c_cell_style)
                             col_count += 1
-                            
                             row_count += 1
                 if has_payment:
                     row_count -= 1

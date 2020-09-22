@@ -109,8 +109,8 @@ class PiutangDetailReportWizard(models.TransientModel):
             
             # RETUR
             returs = []
-            payment_returs = invoice.payment_move_line_ids.filtered(lambda l: l.journal_id.code in ['RETUR'] and self.date_from <= l.date <= self.date_to)
-            payment_returs_before = invoice.payment_move_line_ids.filtered(lambda l: l.journal_id.code in ['RETUR'] and l.date < self.date_from)
+            payment_returs = invoice.payment_move_line_ids.filtered(lambda l: l.journal_id.code.replace(" ","") in ['RETUR'] and self.date_from <= l.date <= self.date_to)
+            payment_returs_before = invoice.payment_move_line_ids.filtered(lambda l: l.journal_id.code.replace(" ","") in ['RETUR'] and l.date < self.date_from)
             for payment in payment_returs:
                 payment_amount = abs(payment.balance)
                 data = [
@@ -130,8 +130,8 @@ class PiutangDetailReportWizard(models.TransientModel):
             
             # KLAIM
             klaim = []
-            payment_klaim = invoice.payment_move_line_ids.filtered(lambda l: l.journal_id.code in ['KLAIM'] and self.date_from <= l.date <= self.date_to)
-            payment_klaim_before = invoice.payment_move_line_ids.filtered(lambda l: l.journal_id.code in ['KLAIM'] and l.date < self.date_from)
+            payment_klaim = invoice.payment_move_line_ids.filtered(lambda l: l.journal_id.code.replace(" ","") in ['KLAIM'] and self.date_from <= l.date <= self.date_to)
+            payment_klaim_before = invoice.payment_move_line_ids.filtered(lambda l: l.journal_id.code.replace(" ","") in ['KLAIM'] and l.date < self.date_from)
             for payment in payment_klaim:
                 payment_amount = abs(payment.balance)
                 data = [
@@ -153,8 +153,8 @@ class PiutangDetailReportWizard(models.TransientModel):
             
             # BANK CHARGE
             bank_charges = []
-            payment_bank_charges = invoice.payment_move_line_ids.filtered(lambda l: l.account_id.code in ['5103030000', '7302020000', '7302020100', '7302020200'] and self.date_from <= l.date <= self.date_to)
-            payment_bank_charges_before = invoice.payment_move_line_ids.filtered(lambda l: l.account_id.code in ['5103030000', '7302020000', '7302020100', '7302020200'] and l.date < self.date_from)
+            payment_bank_charges = invoice.payment_move_line_ids.mapped('move_id.line_ids').filtered(lambda l: l.account_id.code in ['5103030000', '7302020000', '7302020100', '7302020200'] and self.date_from <= l.date <= self.date_to)
+            payment_bank_charges_before = invoice.payment_move_line_ids.mapped('move_id.line_ids').filtered(lambda l: l.account_id.code in ['5103030000', '7302020000', '7302020100', '7302020200'] and l.date < self.date_from)
             for payment in payment_klaim:
                 payment_amount = abs(payment.balance)
                 data = [
@@ -178,8 +178,8 @@ class PiutangDetailReportWizard(models.TransientModel):
             
             # KOMISI
             komisi = []
-            payment_komisi = invoice.payment_move_line_ids.filtered(lambda l: l.journal_id.code in ['PPH23', 'KME'] and self.date_from <= l.date <= self.date_to)
-            payment_komisi_before = invoice.payment_move_line_ids.filtered(lambda l: l.journal_id.code in ['PPH23', 'KME'] and l.date < self.date_from)
+            payment_komisi = invoice.payment_move_line_ids.filtered(lambda l: l.journal_id.code.replace(" ","") in ['PPH23', 'KME'] and self.date_from <= l.date <= self.date_to)
+            payment_komisi_before = invoice.payment_move_line_ids.filtered(lambda l: l.journal_id.code.replace(" ","") in ['PPH23', 'KME'] and l.date < self.date_from)
             for payment in payment_komisi:
                 payment_amount = abs(payment.balance)
                 data = [
@@ -205,8 +205,8 @@ class PiutangDetailReportWizard(models.TransientModel):
             
             # POTONGAN
             potongan = []
-            payment_potongan = invoice.payment_move_line_ids.filtered(lambda l: l.account_id.code in ['POT'] and self.date_from <= l.date <= self.date_to)
-            payment_potongan_before = invoice.payment_move_line_ids.filtered(lambda l: l.account_id.code in ['POT'] and l.date < self.date_from)
+            payment_potongan = invoice.payment_move_line_ids.mapped('move_id.line_ids').filtered(lambda l: l.account_id.code in ['POT'] and self.date_from <= l.date <= self.date_to)
+            payment_potongan_before = invoice.payment_move_line_ids.mapped('move_id.line_ids').filtered(lambda l: l.account_id.code in ['POT'] and l.date < self.date_from)
             for payment in payment_potongan:
                 payment_amount = abs(payment.balance)
                 data = [
@@ -234,15 +234,21 @@ class PiutangDetailReportWizard(models.TransientModel):
             
             # LAIN => RECLASS, KOMPENSASI
             others = []
-            preclass = invoice.payment_move_line_ids.filtered(lambda l: l.journal_id.code in ['EUMAR', 'LUMAR'] and self.date_from <= l.date <= self.date_to)
-            preclass_before = invoice.payment_move_line_ids.filtered(lambda l: l.journal_id.code in ['EUMAR', 'LUMAR'] and l.date < self.date_from)
-            pkompensasi = invoice.payment_move_line_ids.filtered(lambda l: l.journal_id.code in ['KPE', 'KPL'] and self.date_from <= l.date <= self.date_to)
-            pkompensasi_before = invoice.payment_move_line_ids.filtered(lambda l: l.journal_id.code in ['KPE', 'KPL'] and l.date < self.date_from)
+            preclass = invoice.payment_move_line_ids.filtered(lambda l: l.journal_id.code.replace(" ","") in ['EUMAR', 'LUMAR'] and self.date_from <= l.date <= self.date_to)
+            preclass_before = invoice.payment_move_line_ids.filtered(lambda l: l.journal_id.code.replace(" ","") in ['EUMAR', 'LUMAR'] and l.date < self.date_from)
+            pkompensasi = invoice.payment_move_line_ids.filtered(lambda l: l.journal_id.code.replace(" ","") in ['KPE', 'KPL'] and self.date_from <= l.date <= self.date_to)
+            pkompensasi_before = invoice.payment_move_line_ids.filtered(lambda l: l.journal_id.code.replace(" ","") in ['KPE', 'KPL'] and l.date < self.date_from)
+            pjmar = invoice.payment_move_line_ids.filtered(lambda l: l.journal_id.code.replace(" ","") in ['JMAR'] and self.date_from <= l.date <= self.date_to)
+            pjmar_before = invoice.payment_move_line_ids.filtered(lambda l: l.journal_id.code.replace(" ","") in ['JMAR'] and l.date < self.date_from)
             
-            payment_others = preclass + pkompensasi
-            payment_others_before = preclass_before + pkompensasi_before
+            payment_others = preclass + pkompensasi + pjmar
+            payment_others_before = preclass_before + pkompensasi_before + pjmar_before
             for payment in payment_others:
                 payment_amount = abs(payment.balance)
+                #PEMBAYARAN GABUNG
+                if payment.journal_id.code == 'JMAR':
+                    for pay in payment.full_reconcile_id.reconciled_line_ids.filtered(lambda l: l.move_id.name == invoice.number):
+                        payment_amount = abs(pay.balance)
                 data = [
                     payment.move_id.name,
                     payment.move_id.ref,
@@ -270,8 +276,8 @@ class PiutangDetailReportWizard(models.TransientModel):
             
             # PEMBULATAN
             pembulatan = []
-            payment_pembulatan = invoice.payment_move_line_ids.filtered(lambda l: l.account_id.code in ['7302000000', '7302040000'] and self.date_from <= l.date <= self.date_to)
-            payment_pembulatan_before = invoice.payment_move_line_ids.filtered(lambda l: l.account_id.code in ['7302000000', '7302040000'] and l.date < self.date_from)
+            payment_pembulatan = invoice.payment_move_line_ids.mapped('move_id.line_ids').filtered(lambda l: l.account_id.code in ['7302000000', '7302040000'] and self.date_from <= l.date <= self.date_to)
+            payment_pembulatan_before = invoice.payment_move_line_ids.mapped('move_id.line_ids').filtered(lambda l: l.account_id.code in ['7302000000', '7302040000'] and l.date < self.date_from)
             for payment in payment_pembulatan:
                 payment_amount = abs(payment.balance)
                 data = [
@@ -471,8 +477,8 @@ class PiutangDetailReportWizard(models.TransientModel):
 
             # PAYMENT RETURS
             returs = []
-            payment_returs = invoice.payment_move_line_ids.filtered(lambda l: l.journal_id.code in ['RETUR'] and self.date_from <= l.date <= self.date_to)
-            payment_returs_before = invoice.payment_move_line_ids.filtered(lambda l: l.journal_id.code in ['RETUR'] and l.date < self.date_from)
+            payment_returs = invoice.payment_move_line_ids.filtered(lambda l: l.journal_id.code.replace(" ","") in ['RETUR'] and self.date_from <= l.date <= self.date_to)
+            payment_returs_before = invoice.payment_move_line_ids.filtered(lambda l: l.journal_id.code.replace(" ","") in ['RETUR'] and l.date < self.date_from)
             for payment in payment_returs:
                 payment_amount_currency = abs(payment.amount_currency)
                 payment_amount_idr = abs(payment.balance)
@@ -497,8 +503,8 @@ class PiutangDetailReportWizard(models.TransientModel):
 
             # PAYMENT KLAIM
             klaim = []
-            payment_klaim = invoice.payment_move_line_ids.filtered(lambda l: l.journal_id.code in ['KLAIM'] and self.date_from <= l.date <= self.date_to)
-            payment_klaim_before = invoice.payment_move_line_ids.filtered(lambda l: l.journal_id.code in ['KLAIM'] and l.date < self.date_from)
+            payment_klaim = invoice.payment_move_line_ids.filtered(lambda l: l.journal_id.code.replace(" ","") in ['KLAIM'] and self.date_from <= l.date <= self.date_to)
+            payment_klaim_before = invoice.payment_move_line_ids.filtered(lambda l: l.journal_id.code.replace(" ","") in ['KLAIM'] and l.date < self.date_from)
             for payment in payment_klaim:
                 payment_amount_currency = abs(payment.amount_currency)
                 payment_amount_idr = abs(payment.balance)
@@ -526,8 +532,8 @@ class PiutangDetailReportWizard(models.TransientModel):
 
             # BANK CHARGE
             bank_charges = []
-            payment_bank_charges = invoice.payment_move_line_ids.filtered(lambda l: l.journal_id.code in ['5103030000', '7302020000', '7302020100', '7302020200'] and self.date_from <= l.date <= self.date_to)
-            payment_bank_charges_before = invoice.payment_move_line_ids.filtered(lambda l: l.journal_id.code in ['5103030000', '7302020000', '7302020100', '7302020200'] and l.date < self.date_from)
+            payment_bank_charges = invoice.payment_move_line_ids.filtered(lambda l: l.journal_id.code.replace(" ","") in ['5103030000', '7302020000', '7302020100', '7302020200'] and self.date_from <= l.date <= self.date_to)
+            payment_bank_charges_before = invoice.payment_move_line_ids.filtered(lambda l: l.journal_id.code.replace(" ","") in ['5103030000', '7302020000', '7302020100', '7302020200'] and l.date < self.date_from)
             for payment in payment_bank_charges:
                 payment_amount_currency = abs(payment.amount_currency)
                 payment_amount_idr = abs(payment.balance)
@@ -558,8 +564,8 @@ class PiutangDetailReportWizard(models.TransientModel):
 
             # KOMISI
             komisi = []
-            payment_komisi = invoice.payment_move_line_ids.filtered(lambda l: l.journal_id.code in ['PPH23', 'KME'] and self.date_from <= l.date <= self.date_to)
-            payment_komisi_before = invoice.payment_move_line_ids.filtered(lambda l: l.journal_id.code in ['PPH23', 'KME'] and l.date < self.date_from)
+            payment_komisi = invoice.payment_move_line_ids.filtered(lambda l: l.journal_id.code.replace(" ","") in ['PPH23', 'KME'] and self.date_from <= l.date <= self.date_to)
+            payment_komisi_before = invoice.payment_move_line_ids.filtered(lambda l: l.journal_id.code.replace(" ","") in ['PPH23', 'KME'] and l.date < self.date_from)
             for payment in payment_komisi:
                 payment_amount_currency = abs(payment.amount_currency)
                 payment_amount_idr = abs(payment.balance)
@@ -593,8 +599,8 @@ class PiutangDetailReportWizard(models.TransientModel):
             
             # POTONGAN
             potongan = []
-            payment_potongan = invoice.payment_move_line_ids.filtered(lambda l: l.journal_id.code in ['POT'] and self.date_from <= l.date <= self.date_to)
-            payment_potongan_before = invoice.payment_move_line_ids.filtered(lambda l: l.journal_id.code in ['POT'] and l.date < self.date_from)
+            payment_potongan = invoice.payment_move_line_ids.filtered(lambda l: l.journal_id.code.replace(" ","") in ['POT'] and self.date_from <= l.date <= self.date_to)
+            payment_potongan_before = invoice.payment_move_line_ids.filtered(lambda l: l.journal_id.code.replace(" ","") in ['POT'] and l.date < self.date_from)
             for payment in payment_potongan:
                 payment_amount_currency = abs(payment.amount_currency)
                 payment_amount_idr = abs(payment.balance)
@@ -631,16 +637,23 @@ class PiutangDetailReportWizard(models.TransientModel):
                 
             # LAIN => RECLAS & KOMPENSASI
             others = []
-            preclass = invoice.payment_move_line_ids.filtered(lambda l: l.journal_id.code in ['EUMAR', 'LUMAR'] and self.date_from <= l.date <= self.date_to)
-            preclass_before = invoice.payment_move_line_ids.filtered(lambda l: l.journal_id.code in ['EUMAR', 'LUMAR'] and l.date < self.date_from)
-            pkompensasi = invoice.payment_move_line_ids.filtered(lambda l: l.journal_id.code in ['KPE', 'KPL'] and self.date_from <= l.date <= self.date_to)
-            pkompensasi_before = invoice.payment_move_line_ids.filtered(lambda l: l.journal_id.code in ['KPE', 'KPL'] and l.date < self.date_from)
+            preclass = invoice.payment_move_line_ids.filtered(lambda l: l.journal_id.code.replace(" ","") in ['EUMAR', 'LUMAR'] and self.date_from <= l.date <= self.date_to)
+            preclass_before = invoice.payment_move_line_ids.filtered(lambda l: l.journal_id.code.replace(" ","") in ['EUMAR', 'LUMAR'] and l.date < self.date_from)
+            pkompensasi = invoice.payment_move_line_ids.filtered(lambda l: l.journal_id.code.replace(" ","") in ['KPE', 'KPL'] and self.date_from <= l.date <= self.date_to)
+            pkompensasi_before = invoice.payment_move_line_ids.filtered(lambda l: l.journal_id.code.replace(" ","") in ['KPE', 'KPL'] and l.date < self.date_from)
+            pjmar = invoice.payment_move_line_ids.filtered(lambda l: l.journal_id.code.replace(" ","") in ['JMAR'] and self.date_from <= l.date <= self.date_to)
+            pjmar_before = invoice.payment_move_line_ids.filtered(lambda l: l.journal_id.code.replace(" ","") in ['JMAR'] and l.date < self.date_from)
             
-            payment_others = preclass + pkompensasi
-            payment_others_before = preclass_before + pkompensasi_before
+            payment_others = preclass + pkompensasi + pjmar
+            payment_others_before = preclass_before + pkompensasi_before + pjmar_before
             for payment in payment_others:
                 payment_amount_currency = abs(payment.amount_currency)
                 payment_amount_idr = abs(payment.balance)
+                #PEMBAYARAN GABUNG
+                if payment.journal_id.code == 'JMAR':
+                    for pay in payment.full_reconcile_id.reconciled_line_ids.filtered(lambda l: l.move_id.name == invoice.number):
+                        payment_amount_currency = abs(pay.amount_currency)
+                        payment_amount_idr = abs(pay.balance)
                 data = [
                     payment.move_id.name,
                     payment.move_id.ref,
@@ -677,8 +690,8 @@ class PiutangDetailReportWizard(models.TransientModel):
             
             # PEMBULATAN => COA BIAYA LAIN
             pembulatan = []
-            payment_pembulatan = invoice.payment_move_line_ids.filtered(lambda l: l.account_id.code in ['7302000000', '7302040000'] and self.date_from <= l.date <= self.date_to)
-            payment_pembulatan_before = invoice.payment_move_line_ids.filtered(lambda l: l.account_id.code in ['7302000000', '7302040000'] and l.date < self.date_from)
+            payment_pembulatan = invoice.payment_move_line_ids.mapped('move_id.line_ids').filtered(lambda l: l.account_id.code in ['7302000000', '7302040000'] and self.date_from <= l.date <= self.date_to)
+            payment_pembulatan_before = invoice.payment_move_line_ids.mapped('move_id.line_ids').filtered(lambda l: l.account_id.code in ['7302000000', '7302040000'] and l.date < self.date_from)
             for payment in payment_pembulatan:
                 payment_amount_currency = abs(payment.amount_currency)
                 payment_amount_idr = abs(payment.balance)
@@ -718,7 +731,7 @@ class PiutangDetailReportWizard(models.TransientModel):
             for payment in payment_pembulatan_before:
                 payment_pembulatan_before_valas_amount += abs(payment.amount_currency)
                 payment_pembulatan_before_idr_amount += abs(payment.balance)
-
+            has_payment = False
             payments = [
                 banks,
                 returs,
@@ -729,14 +742,16 @@ class PiutangDetailReportWizard(models.TransientModel):
                 others,
                 pembulatan
             ]
-
+            
             total_payment_before_date_from_valas = payment_banks_before_valas_amount + payment_returs_before_valas_amount + payment_klaim_before_valas_amount + \
                 payment_bank_charges_before_valas_amount + payment_komisi_before_valas_amount + payment_potongan_before_valas_amount + payment_others_before_valas_amount + payment_pembulatan_before_valas_amount
 
             saldo_awal_valas = invoice.amount_total - total_payment_before_date_from_valas if invoice.date_invoice < self.date_from else 0
             penjualan_valas = invoice.amount_total if self.date_from <= invoice.date_invoice <= self.date_to else 0
-            penjualan_idr = abs(invoice.move_id.line_ids.filtered(lambda l: l.account_id.internal_type == 'receivable')[0].balance) if self.date_from <= invoice.date_invoice <= self.date_to else 0
-
+            if invoice.move_id.line_ids.filtered(lambda l: l.account_id.internal_type == 'receivable'):
+                penjualan_idr = abs(invoice.move_id.line_ids.filtered(lambda l: l.account_id.internal_type == 'receivable')[0].balance) if self.date_from <= invoice.date_invoice <= self.date_to else 0
+            else:
+                penjualan_idr = 0
             saldo_ahir_valas = saldo_awal_valas + penjualan_valas - pelunasan_valas
             selisih_idr = (pelunasan_idr + (round(saldo_ahir_valas * datas['kurs_ahir'], 2))) - ((round(datas['kurs_awal'] * saldo_awal_valas, 2)) + penjualan_idr)
 
